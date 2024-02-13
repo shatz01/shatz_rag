@@ -5,11 +5,12 @@ from shatz_rag.backend import backend
 import os
 from shatz_rag import styles
 from shatz_rag.templates import template
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 import reflex as rx
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class RagState(rx.State):
     """The state for the RAG page."""
@@ -34,8 +35,8 @@ class RagState(rx.State):
 
         self.processing, self.complete = True, False
         yield
-        response = openai.Image.create(prompt=self.prompt, n=1, size="1024x1024")
-        self.image_url = response["data"][0]["url"]
+        response = client.images.generate(prompt=self.prompt, n=1, size="1024x1024")
+        self.image_url = response.data[0].url
         self.processing, self.complete = False, True
 
 
