@@ -9,9 +9,13 @@ def get_index():
     index = VectorStoreIndex.from_documents(documents)
     return index
 
-
-if __name__ == "__main__":
+def get_response(query):
     index = get_index()
     query_engine = index.as_query_engine()
-    response = query_engine.query("What did the author do growing up?")
+    response = query_engine.query(query)
+    return response
+
+
+if __name__ == "__main__":
+    response = get_response("What did the author do growing up?")
     print(response)
